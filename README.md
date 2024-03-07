@@ -44,20 +44,8 @@ CUDA_VISIBLE_DEVICES=0 python main.py \
 --epochs 20 --output_dir ./log/deit-small-patch16-224-w3a16 \
 --wbits 3 --abits 16 --dga --lwc --lac --wrc
 ```
-4. real quant
 
-We utilize the kernel from [AutoGPTQ](https://github.com/AutoGPTQ/AutoGPTQ) to enable real quantization. If you aim to accelerate and compress your model using real quantization, we can follow these steps.
-```
-pip install auto-gptq==0.6.0
-
-CUDA_VISIBLE_DEVICES=0 python main.py \
---model /PATH/TO/DeiT/deit-small-patch16-224  \
---epochs 20 --output_dir ./log/deit-small-patch16-224-w4a4 \
---wbits 4 --abits 16 --lwc --lac --wrc \
---real_quant --save_dir ./real_quant/deit-small-patch16-224-w4a16
-```
-
-5. domain adaptation
+4. domain adaptation
 
 Below is the running script for Domain Adaptation, and we will release the pre-trained model weights shortly.
 ```
@@ -70,6 +58,19 @@ CUDA_VISIBLE_DEVICES=7 python main.py \
 --calib_dataset amazon --target_dataset webcam \
 --tl_loss --tl_weight 1.5
 
+```
+
+5. real quant
+
+We utilize the kernel from [AutoGPTQ](https://github.com/AutoGPTQ/AutoGPTQ) to enable real quantization. If you aim to accelerate and compress your model using real quantization, we can follow these steps.
+```
+pip install auto-gptq==0.6.0
+
+CUDA_VISIBLE_DEVICES=0 python main.py \
+--model /PATH/TO/DeiT/deit-small-patch16-224  \
+--epochs 20 --output_dir ./log/deit-small-patch16-224-w4a4 \
+--wbits 4 --abits 16 --lwc --lac --wrc \
+--real_quant --save_dir ./real_quant/deit-small-patch16-224-w4a16
 ```
 
 ## Related Project
