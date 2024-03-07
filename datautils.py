@@ -34,10 +34,8 @@ def set_seed(seed):
 
 def get_imagenet(nsamples):
     print("get_imagenet")
-    # 设置文件夹路径
     folder_path = '/PATH/TO/IMAGENET/Calibration'
 
-    # 获取文件夹下的所有图片文件
     image_files = glob.glob(os.path.join(folder_path, '*.JPEG'))
 
     random.shuffle(image_files)
@@ -54,7 +52,7 @@ def get_imagenet(nsamples):
 def get_amazon(nsamples):
     print("get amazon")
     train_dataset = Amazon(path='/PATH/TO/OFFICE-31/AMAZON', transforms=data_transforms['test'])
-    # 创建数据加载器
+    # create data loader
     train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True)
     
     trainloader = []
@@ -72,7 +70,7 @@ def get_dslr(nsamples):
     print("get dslr")
     train_dataset = DSLR(path='/PATH/TO/OFFICE-31/DSLR', transforms=data_transforms['test'])
     
-    # 创建数据加载器
+    # create data loader
     train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True)    
     trainloader = []
     testenc = []
@@ -89,7 +87,7 @@ def get_webcam(nsamples):
     print("get webcam")
     train_dataset = Webcam(path='/PATH/TO/OFFICE-31/WEBCAM', transforms=data_transforms['test'])
 
-    # 创建数据加载器
+    # create data loader
     train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True)    
     
     trainloader = []
@@ -106,7 +104,7 @@ def get_webcam(nsamples):
 def load_art(nsamples):
     print("get office-home art")
 
-    # 创建数据加载器
+    # create data loader
     train_loader, val_loader = get_art() 
     
     trainloader = []
@@ -123,7 +121,7 @@ def load_art(nsamples):
 def load_clipart(nsamples):
     print("get office-home clipart")
 
-    # 创建数据加载器
+    # create data loader
     train_loader, val_loader = get_clipart() 
     
     trainloader = []
@@ -140,7 +138,7 @@ def load_clipart(nsamples):
 def load_product(nsamples):
     print("get office-home product")
 
-    # 创建数据加载器
+    # create data loader
     train_loader, val_loader = get_product() 
     
     trainloader = []
@@ -157,7 +155,7 @@ def load_product(nsamples):
 def load_real_word(nsamples):
     print("get office-home real word")
 
-    # 创建数据加载器
+    # create data loader
     train_loader, val_loader = get_real_word() 
     
     trainloader = []

@@ -221,7 +221,7 @@ def DAQuant(
                         criterion = nn.SmoothL1Loss()
                         loss = criterion(fp_inps[index:index+args.batch_size,], quant_out)
                         
-                        # 迁移学习
+                        # domain adaptation
                         if args.tl_loss:
                             quant_out_log = F.log_softmax(quant_out,dim=2)
                             y = F.softmax(target_inps[index:index+args.batch_size,],dim=2)

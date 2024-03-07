@@ -197,7 +197,7 @@ def main():
         vits.model.save_pretrained(args.save_dir)  
     print('---------------------')
     torch.cuda.empty_cache()
-    #设置模型为评估模式
+
     vits.model.eval()
     vits.model.to(vits.device)
 
@@ -251,7 +251,7 @@ def main():
         vits.model.to(vits.device)
         transfer_learning_test(vits.model, val_loader, logger, vits.device)
     elif 'ImageNet' in args.calib_dataset:
-        # 加载 ImageNet 数据集
+        # load ImageNet dataset
         imagenet_dataloader = eval("{}DataLoader".format('ImageNet'))(
                             args.net,
                             data_dir=os.path.join('/PATH/TO/IMAGENET', 'ImageNet'),
@@ -260,7 +260,7 @@ def main():
                             num_workers=2,
                             split='val')
 
-        # 评估模型准确性
+        # evaluate
         begin_time = time.time()
         accuracy = evaluate_model(vits, vits.processor, imagenet_dataloader, vits.device)
         logger.info(f"consumer time: {time.time()-begin_time}")
@@ -268,7 +268,7 @@ def main():
         logger.info(f"Model Accuracy on ImageNet: {accuracy}")
 
 
-# 评估模型准确性的示例代码
+# evaluate Imagenet dataset
 def evaluate_model(lm, processor, dataloader, dev):
     total_samples = len(dataloader.dataset)
     correct_predictions = 0
@@ -276,23 +276,19 @@ def evaluate_model(lm, processor, dataloader, dev):
     
     with autocast(dtype=torch.float16):
         for data in dataloader:
-            # 图像处理
             inputs = {"pixel_values": data[0].to(lm.device)}
             labels = data[1].to(dev)
-            # 模型前向传播
             outputs = lm.model(**inputs)
             logits = outputs.logits
 
-            # 获取预测结果
             predictions = torch.argmax(logits, dim=1)
-            # 统计正确预测的数量
             correct_predictions += torch.sum(predictions == labels)
     accuracy = correct_predictions.item() / total_samples
     return accuracy
 
 
 
-# 测试模型
+# evaluate domain adaptation
 def transfer_learning_test(model, dataset, logger, device):
     model.eval()
     correct = 0

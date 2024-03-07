@@ -28,7 +28,7 @@ def set_op_by_name(layer, name, new_module):
     else:
         setattr(layer, name, new_module)
 
-# 评估模型准确性的示例代码
+# evaluate
 def evaluate_model(model, dataloader, dev, logger):
     total_samples = len(dataloader.dataset)
     correct_predictions = 0
@@ -36,24 +36,18 @@ def evaluate_model(model, dataloader, dev, logger):
     
     i=0
     with autocast(dtype=torch.float16):
-    # with torch.cuda.amp.autocast():
         with torch.no_grad():
             for data in dataloader:
-                # 图像处理
                 i = i+1
                 inputs = {"pixel_values": data[0].cuda()}
                 labels = data[1].to(dev)
 
-                # 模型前向传播
                 outputs = model(**inputs)
                 if i%5 == 0:
                     logger.info(f"gpu memory usage: {torch.cuda.max_memory_allocated(dev) / 1024**2} MB")
                 logits = outputs.logits
 
-                # 获取预测结果
                 predictions = torch.argmax(logits, dim=1)
-
-                # 统计正确预测的数量
                 correct_predictions += torch.sum(predictions == labels)
 
     accuracy = correct_predictions.item() / total_samples
@@ -94,7 +88,7 @@ def main():
     logger.info(f"gpu memory usage: {torch.cuda.max_memory_allocated(device) / 1024**2} MB")
     model.eval()
 
-    # 加载 ImageNet 数据集
+    # load ImageNet dataset
     imagenet_dataloader = eval("{}DataLoader".format('ImageNet'))(
                             model_name,
                             data_dir=os.path.join('/PATH/TO/IMAGENET', 'ImageNet'),
@@ -103,7 +97,6 @@ def main():
                             num_workers=64,
                             split='val')
     begin = time.time()
-    # 评估模型准确性
     accuracy = evaluate_model(model, imagenet_dataloader, 'cuda', logger)
 
     logger.info(f"time: {time.time()-begin}")
